@@ -68,7 +68,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: teams-operator
-        image: ghcr.io/sarvjeetchhinna/pe-platform-capstone/teams-operator:v0.1.0
+        image: ghcr.io/sarvjeetchhinna/pe-platform-capstone/teams-operator:v0.1.2
         env:
         - name: TEAMS_API_URL
           value: "http://teams-api-service.engineering-platform.svc.cluster.local:4200"
