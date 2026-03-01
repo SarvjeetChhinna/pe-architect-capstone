@@ -14,8 +14,8 @@ NC='\033[0m' # No Color
 
 # Configuration
 NAMESPACE="engineering-platform"
-UI_IMAGE="ghcr.io/SarvjeetChhinna/pe-platform-capstone/teams-app:v0.1.0"
-API_IMAGE="ghcr.io/SarvjeetChhinna/pe-platform-capstone/teams-api:v0.1.0"
+UI_IMAGE="ghcr.io/sarvjeetchhinna/pe-platform-capstone/teams-app:v0.1.0"
+API_IMAGE="ghcr.io/sarvjeetchhinna/pe-platform-capstone/teams-api:v0.1.0"
 
 # Functions
 log_info() {

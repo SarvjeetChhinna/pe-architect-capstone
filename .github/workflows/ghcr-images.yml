@@ -14,7 +14,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAMESPACE: SarvjeetChhinna/pe-platform-capstone
+  IMAGE_NAMESPACE: sarvjeetchhinna/pe-platform-capstone
 
 jobs:
   build-and-push:
