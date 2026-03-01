@@ -1,8 +1,8 @@
-# k8s/teams-api-service.yaml
+# k8s/teams-api-canary-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: teams-api-service
+  name: teams-api-canary-service
   namespace: engineering-platform
   labels:
     app: teams-api
@@ -14,4 +14,3 @@ spec:
     targetPort: 8000
     protocol: TCP
     name: http
-
