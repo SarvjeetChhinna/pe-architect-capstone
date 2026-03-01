@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: demo-prod-rollout
+  namespace: production
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: demo-prod-rollout
+  template:
+    metadata:
+      labels:
+        app: demo-prod-rollout
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27
+        ports:
+        - containerPort: 80
+  strategy:
+    canary:
+      steps:
+      - setWeight: 50
+      - pause:
+          duration: 5
+      - setWeight: 100

@@ -1,0 +1,19 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequirerollout
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequireRollout
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequirerollout
+
+        violation[{"msg": msg}] {
+          input.review.object.metadata.namespace == "production"
+          input.review.kind.kind == "Deployment"
+          msg := "Deployments are not allowed in the production namespace. Use an Argo Rollouts Rollout instead."
+        }
