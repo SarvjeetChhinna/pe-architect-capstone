@@ -65,13 +65,18 @@ deploy() {
   log "Deploying Teams demo environment..."
 
   kubectl apply -f "${KEYCLOAK_MANIFEST}"
+  kubectl delete deployment/teams-api -n "${NAMESPACE_PLATFORM}" --ignore-not-found
   kubectl delete deployment/teams-ui -n "${NAMESPACE_PLATFORM}" --ignore-not-found
   kubectl apply -f "${TEAMS_APP_MANIFEST_DIR}"
   kubectl apply -f "${OPERATOR_MANIFEST}"
 
   log "Waiting for deployments to become ready..."
   wait_for_deploy "${NAMESPACE_KEYCLOAK}" "keycloak"
-  wait_for_deploy "${NAMESPACE_PLATFORM}" "teams-api"
+  if kubectl get rollout/teams-api -n "${NAMESPACE_PLATFORM}" >/dev/null 2>&1; then
+    wait_for_rollout "${NAMESPACE_PLATFORM}" "teams-api"
+  else
+    wait_for_deploy "${NAMESPACE_PLATFORM}" "teams-api"
+  fi
   if kubectl get rollout/teams-ui -n "${NAMESPACE_PLATFORM}" >/dev/null 2>&1; then
     wait_for_rollout "${NAMESPACE_PLATFORM}" "teams-ui"
   else

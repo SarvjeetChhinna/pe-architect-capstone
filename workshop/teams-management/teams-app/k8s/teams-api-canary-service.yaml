@@ -1,16 +1,16 @@
-# k8s/teams-ui-canary-service.yaml
+# k8s/teams-api-canary-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: teams-ui-canary-service
+  name: teams-api-canary-service
   namespace: engineering-platform
   labels:
-    app: teams-ui
-    component: frontend
+    app: teams-api
+    component: backend
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 80
+  - port: 4200
+    targetPort: 8000
     protocol: TCP
     name: http

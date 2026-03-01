@@ -110,6 +110,7 @@ deploy_k8s() {
     log_success "Namespace '$NAMESPACE' ready"
 
     # Apply Kubernetes manifests
+    kubectl delete deployment/teams-api -n $NAMESPACE --ignore-not-found
     kubectl delete deployment/teams-ui -n $NAMESPACE --ignore-not-found
     kubectl apply -f k8s/
 
@@ -117,7 +118,11 @@ deploy_k8s() {
 
     # Wait for deployments to be ready
     log_info "Waiting for deployments to be ready..."
-    kubectl wait --for=condition=available --timeout=300s deployment/teams-api -n $NAMESPACE
+    if kubectl get rollout/teams-api -n $NAMESPACE >/dev/null 2>&1; then
+        kubectl wait --for=condition=Healthy --timeout=300s rollout/teams-api -n $NAMESPACE
+    else
+        kubectl wait --for=condition=available --timeout=300s deployment/teams-api -n $NAMESPACE
+    fi
     if kubectl get rollout/teams-ui -n $NAMESPACE >/dev/null 2>&1; then
         kubectl wait --for=condition=Healthy --timeout=300s rollout/teams-ui -n $NAMESPACE
     else

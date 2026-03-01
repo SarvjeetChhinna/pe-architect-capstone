@@ -1,6 +1,6 @@
 # k8s/teams-api-deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: teams-api
   namespace: engineering-platform
@@ -9,6 +9,7 @@ metadata:
     component: backend
 spec:
   replicas: 1
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: teams-api
@@ -47,3 +48,12 @@ spec:
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 5
+  strategy:
+    canary:
+      stableService: teams-api-service
+      canaryService: teams-api-canary-service
+      steps:
+      - setWeight: 50
+      - pause:
+          duration: 10
+      - setWeight: 100

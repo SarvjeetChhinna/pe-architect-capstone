@@ -15,4 +15,7 @@ spec:
     protocol: TCP
     name: http
 
+  selector:
+    app: teams-ui
+
 
