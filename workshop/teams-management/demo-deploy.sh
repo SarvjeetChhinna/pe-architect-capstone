@@ -43,18 +43,24 @@ port_forward() {
   log "- Teams API: http://localhost:4201"
   log ""
 
-  kubectl port-forward -n "${NAMESPACE_KEYCLOAK}" svc/keycloak-service 8180:8080 >/dev/null 2>&1 &
-  local pf_keycloak_pid=$!
-  kubectl port-forward -n "${NAMESPACE_PLATFORM}" svc/teams-ui-service 4200:80 >/dev/null 2>&1 &
-  local pf_ui_pid=$!
-  kubectl port-forward -n "${NAMESPACE_PLATFORM}" svc/teams-api-service 4201:4200 >/dev/null 2>&1 &
-  local pf_api_pid=$!
+  local pf_keycloak_pid=""
+  local pf_ui_pid=""
+  local pf_api_pid=""
 
   cleanup_port_forwards() {
-    kill "${pf_keycloak_pid}" "${pf_ui_pid}" "${pf_api_pid}" >/dev/null 2>&1 || true
+    [[ -n "${pf_keycloak_pid}" ]] && kill "${pf_keycloak_pid}" >/dev/null 2>&1 || true
+    [[ -n "${pf_ui_pid}" ]] && kill "${pf_ui_pid}" >/dev/null 2>&1 || true
+    [[ -n "${pf_api_pid}" ]] && kill "${pf_api_pid}" >/dev/null 2>&1 || true
   }
 
   trap cleanup_port_forwards INT TERM EXIT
+
+  kubectl port-forward -n "${NAMESPACE_KEYCLOAK}" svc/keycloak-service 8180:8080 &
+  pf_keycloak_pid=$!
+  kubectl port-forward -n "${NAMESPACE_PLATFORM}" svc/teams-ui-service 4200:80 &
+  pf_ui_pid=$!
+  kubectl port-forward -n "${NAMESPACE_PLATFORM}" svc/teams-api-service 4201:4200 &
+  pf_api_pid=$!
 
   wait
 }

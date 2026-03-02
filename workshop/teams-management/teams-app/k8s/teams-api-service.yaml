@@ -9,6 +9,8 @@ metadata:
     component: backend
 spec:
   type: ClusterIP
+  selector:
+    app: teams-api
   ports:
   - port: 4200
     targetPort: 8000
